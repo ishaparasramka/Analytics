@@ -85,5 +85,30 @@ pairs(mtcars)
 pairs(mtcars[1:4])
 options(digits=4)
 
+#divide range into step of 15 ie 10 levels
+breaks =seq(0,150,by=15)
+
+
+#Continuous Data 
+set.seed(1234)
+x3 = runif(100,0,150)  # 0 to 150 marks range, 100 values 
+x3
+x3 = ceiling(x3)  #round to higher value
+x3
+range(x3)
+# Divide range into step of 15 ie 10 levels
+breaks = seq(0,150,by=15)
+breaks
+length(breaks)
+x3
+#x3[1] = 60; x3[2] = 75
+x3.cut = cut(x3, breaks)
+x3.cut
+table(x3.cut)
+cbind(table(x3.cut))  #see it vertically
+
        
-       
+#give intervals a character values a, b..
+(x3.cut = cut(x3, breaks, labels=letters[1:10]))
+#(x3.cut = cut(x3, breaks, labels=letters[1:length(breaks)-1]))
+x3.cut
