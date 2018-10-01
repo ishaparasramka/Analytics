@@ -6,7 +6,7 @@
 marks = data.frame(sub1=c(0,1,2,4,5,4,6,7),sub2=c(0,1,2,3,3,4,5,5))
 marks
 km1 = kmeans(marks, center=2) #data set needs to be in a data frame.
-?kmeans
+?kmeans #need to have numbers and values
 km1
 plot(marks,col=km1$cluster,cex=1.5)
 points(km1$center,col=1:2,pch=8,cex=2) #represents the centroid
