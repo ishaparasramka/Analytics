@@ -1,43 +1,52 @@
-# Decision Trees : - regression tree
+# Decision Tree - Classification
+#we want predict for combination of input variables, is a person likely to servive or not
 
-library(ISLR)
-data(Carseats)
-data = Carseats
+#import data from online site
+path = 'https://raw.githubusercontent.com/thomaspernet/data_csv_r/master/data/titanic_csv.csv'
+titanic <-read.csv(path)
+head(titanic)
+names(titanic)
+data = titanic[,c(2,3,5,6,7)]  #select all rows and few columns only
 head(data)
 
-#Libraries for Decision Tree
+#load libraries
 library(rpart)
 library(rpart.plot)
 
-#Model
-tree1 = rpart(Sales ~ . , data=data, method='anova' )
-tree1
-rpart.plot(tree1, cex=.8)
-
-#this is large tree, so prune it: check cp
-printcp(tree1)
-#cp value should be chosen such that xerror is least
-prunetree = prune(tree1, cp=0.05)
-#here we have selected a different value to simplify the tree
-
-prunetree
-rpart.plot(prunetree, nn=T)
-#Interpretation
-#if ShelveLoc=Good, and Price >= 109.5, sales predicted is 9.2
-
-#improve the plot
-rpart.plot(prunetree, nn=T, cex=.8, type=4)
-#read this document to improve the plot
-#https://cran.r-project.org/web/packages/rpart.plot/rpart.plot.pdf
-#http://www.milbo.org/rpart-plot/prp.pdf
-
-#Predict for test value
-(testdata = sample_n(data,2))
-(predictedSales=predict(prunetree, newdata=testdata, type='vector'))
-cbind(testdata, predictedSales)
-#next line will show error because we have to predict numerical value instead of class/ category, so type of response reqd is vector not class
-(predict(prunetree, newdata=testdata, type='class'))
+#Decision Tree
+fit <- rpart(survived~., data = data, method = 'class')
+fit
+rpart.plot(fit, extra = 106, cex=.8,nn=T)  #plot #every number represents some descriptive characteristic of the tree
 
 
-#see online help here
-#https://www.datacamp.com/community/tutorials/decision-trees-R
+printcp(fit) #select complexity parameter
+prunetree2 = prune(fit, cp=.010)
+rpart.plot(prunetree2, cex=.8,nn=T) # the most accurate model
+prunetree2
+nrow(data)
+
+printcp(fit) #select complexity parameter
+prunetree2 = prune(fit, cp=.015)
+rpart.plot(prunetree2, cex=.8,nn=T) # may not be the most accurate model
+prunetree2
+nrow(data)
+
+#Predict class category or probabilities
+library(dplyr)
+(testdata = sample_n(data,5))
+predict(prunetree2, newdata=testdata, type='class')
+predict(prunetree2, newdata=testdata, type='prob')
+
+#Use decision trees for predicting
+#customer is likely to buy a product or not with probabilities
+#customer is likely to default on payment or not with probabilities
+#Student is likely to get selected, cricket team likely to win etc
+
+#Imp steps
+#select columns for prediction
+#load libraries, create model
+#prune the tree with cp value
+#plot the graph
+#predict for new cases
+
+
